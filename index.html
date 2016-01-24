@@ -112,224 +112,43 @@
 				</section>
 
 				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
+				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h2>Motivación</h2>
+				      <img data-src="./images/Ansible.png" width="50%" heigth="50%" />
+				  </section>
+				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>¿Qué es?</h2>
+				    </div>
+				  </section>
 
-					<section>
-						<div onclick="zoom.to({element: this})">
-						<h2>Docker Machine</h2>
-						<img data-src="./images/docker_machine.png" width="50%" heigth="50%" />
-					</section>
+				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>¿Para qué?</h3>
+				    </div>
+				  </section>
 
-					<section>
-						<div onclick="zoom.to({element: this})">
-							<h2>Docker Machine</h2>
-							<ul>
-								<li>Permite <b>crear Máquinas virtuales</b></li>
-								<li>Con <b>Docker Engine</b> instalado</li>
-								<ul>
-									<li>se pude <b>actualizar</b> la versión en cualquier momento</li>
-									<li>con el puerto <b>2376</b> abierto para recibir peticiones remotas</li>
-								</ul>
-								<li>Con <b>Open SSH-Server</b> corriendo</li>
-								<li>En diversos lugares</li>
-								<ul>
-									<li>localmente en <b>virtualbox, vmware</b>, etc.</li>
-									<li><b>amazonec2, digitalocean, azure, openstack, rackspace, google cloud</b>, etc.</li>
-								</ul>
-								<li>Con conexión <b>TLS/SSL</b> configurada</li>
-							</ul>
-						</div>
-					</section>
+ 				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>¿Quienes lo usan?</h3>
+				    </div>
+				  </section>
 
-					<section>
-						<div onclick="zoom.to({element: this})">
-							<h3>Monolithic</h3>
-							<blockquote>
-								<ul>
-									<li>One large and complex Program</li>
-									<li>Several Logical Different Components</li>
-									<li>Many <b>Unix</b> variants are Monolithic *</li>
-								</ul>
-							</blockquote>
-						</div>
+				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Historia</h3>
+				    </div>
+				  </section>
 
-						<img src="./images/kernel_types.png" onclick="zoom.to({element: this})"></img>
-
-						<font size="1" onclick="zoom.to({element: this})"><ul>
-							<li>* <b>MAC OS X</b> and <b>GNU Hurd</b> are Microkernels</li>
-							<li><a href="https://commons.wikimedia.org/wiki/File:OS-structure2.svg#/media/File:OS-structure2.svg">OS-structure2</a>" by Golftheman - <a class="external free" href="http://en.wikipedia.org/wiki/Image:OS-structure.svg">http://en.wikipedia.org/wiki/Image:OS-structure.svg</a>. Licensed under Public Domain via <a href="https://commons.wikimedia.org/wiki/">Commons</a></li>
-						</ul>
-						</font>
-					</section>
-
+				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Ansible vs Saltstack vs Puppet vs Chef</h3>
+				    </div>
+				  </section>
 				</section>
-
 				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
-					<section>
-						<div onclick="zoom.to({element: this})">
-						<h2>Docker Swarm</h2>
-						<img data-src="./images/docker_swarm.png"/>
-					</section>
-
-					<section>
-						<div onclick="zoom.to({element: this})">
-						<h2>Docker Swarm</h2>
-						<p><blockquote>Modules are <b>pieces of code</b> that can be loaded and unloaded into the kernel
-<b>upon demand</b>. They extend the functionality of the kernel without the need to reboot the system.</q></p>
-
-<p><q>The <b>device driver</b> is <b>one type</b> of module. It allows the kernel to access hardware connected to the system.</blockquote></p>
-						</div>
-					</section>
-
-					<section>
-						<h2>Not your daily C / Not libc</h2>
-						<ul onclick="zoom.to({element: this})">
-							<li>The kernel doesn't use libc.</li>
-							<li>The kernel defines some functions like: <b>printk</b>.</li>
-							<li>So Kernel Modules are limited: e.g. <b>NO FLOATING POINT ARITHMETIC</b></li>
-						</ul>
-						<img src="./images/linus_fp.png" onclick="zoom.to({element: this})" width="35%" heigth="35%"/>
-					</section>
-
-					<section>
-						<h3>Where are they?</h3>
-						<blockquote onclick="zoom.to({element: this})">
-							/usr/lib/modules/kernel_release
-						</blockquote>
-						<img src="./images/ko-list.png" onclick="zoom.to({element: this})" width="35%" heigth="35%"/>
-					</section>
-					<section>
-						<h3>When are they loaded?</h3>
-						<div onclick="zoom.to({element: this})">
-							<blockquote>
-								<ul>
-									<li>During Kernel Startup Phase: mkinitcpio</li>
-										<ul>
-											<li>/etc/modprobe.d/*</li>
-										</ul>
-									<li>During first process initialization: e.g. udev(part of systemd)</li>
-										<ul>
-											<li>coding parallelism to provide a potential performance advantage versus loading these modules serially.</li>
-											<li>does not always load modules in the same order on each boot.</li>
-											<li>/etc/udev/rules.d/*</li>
-										</ul>
-								</ul>
-							</blockquote>
-						</div>
-					</section>
-					<section>
-						<h3>Linux Kernel Ring</h3>
-						<div onclick="zoom.to({element: this})">
-							<pre><code data-trim>
-	[david@JANUS]$ dmesg -T
-	    					</code></pre>
-							<p><blockquote >Used to write the <b>kernel messages</b> in Linux and other Unix-like operating systems to standard output (which by default is the display screen).</blockquote></p>
-						</div>
-						<img src="./images/dmesg.png" onclick="zoom.to({element: this})" width="75%" height="75%"/>
-					</section>
-					<section>
-						<h3>List Loaded Modules</h3>
-						<div onclick="zoom.to({element: this})">
-							<pre><code data-trim>
-	[david@JANUS]$ lsmod
-	    					</code></pre>
-							<p><blockquote>Trivial program which nicely formats the contents of the /proc/modules, showing what <b>kernel modules are currently loaded</b>.</blockquote></p>
-						</div>
-						<img src="./images/lsmod.png" onclick="zoom.to({element: this})" width="35%" height="35%"/>
-					</section>
-					<section>
-						<h3>Which ones is my Hardware using?</h3>
-						<div onclick="zoom.to({element: this})">
-							<pre><code>
-	[david@JANUS:~]$ lspci -k
-							</code></pre>
-							<img src="./images/hardware.png" width="100%" heigth="100%"/>
-						</div>
-					</section>
-					<section>
-						<h3>Get Module Info</h3>
-						<div onclick="zoom.to({element: this})">
-							<pre><code data-trim>
-	[david@JANUS]$ modinfo &lt;a kernel module&gt;
-	    					</code></pre>
-							<p><blockquote>Lists each <b>attribute</b> of the module in form fieldname : value, for easy reading. The filename is listed the same way (although it's not really an attribute).</b>.</blockquote></p>
-						</div>
-						<img src="./images/modinfo.png" onclick="zoom.to({element: this})" width="40%" height="40%"/>
-					</section>
-					<section>
-						<h3>Load a Module (Without Dependencies)</h3>
-						<div onclick="zoom.to({element: this})">
-							<pre><code data-trim>
-	[david@JANUS]$ insmod &lt;a kernel module&gt;
-	    					</code></pre>
-							<p ><blockquote>Trivial program to <b>insert a module into the kernel</b>. Most users will want to use <b>modprobe</b> instead, which is more clever and can handle module dependencies.</b>.</blockquote></p>
-						</div>
-					</section>
-					<section>
-						<h3>Unload a Module</h3>
-						<div onclick="zoom.to({element: this})">
-							<pre><code data-trim>
-	[david@JANUS]$ rmmod &lt;a kernel module&gt;
-	    					</code></pre>
-							<p><blockquote><b>Trivial program to remove a module (when module unloading support is provided) from the kernel. Most users will want to use modprobe with the -r option instead.</b>.</blockquote></p>
-						</div>
-					</section>
-					<section>
-						<h3>Load/Unload a Module (With Dependencies)</h3>
-						<div onclick="zoom.to({element: this})">
-							<pre><code data-trim>
-	[david@JANUS]$ modprobe [-r] &lt;a kernel module&gt;
-	    					</code></pre>
-							<p><blockquote><b>Intelligently adds or removes a module</b> from the Linux kernel.</b>.</blockquote></p>
-						</div>
-					</section>
-					<section>
-						<h3>Blacklisting Kernel Modules</h3>
-						<div onclick="zoom.to({element: this})">
-							<blockquote>
-<pre><code>
-/etc/modprobe.d/blacklist.conf
-...
-install module_name /bin/false
-...
-</code></pre>
-							</blockquote>
-							<blockquote>
-<pre><code>
-/etc/modprobe.d/&lt;somefile&gt;.conf
-...
-# Do not load the 'pcspkr' module on boot.
-blacklist pcspkr
-...
-</code></pre>
-							</blockquote>
-							<blockquote>
-<pre><code>
-/boot/grub/grub.cfg
-...
-linux   /boot/vmlinuz-linux root=UUID=26f245ba-c23f-4ad7-bba8-a235c89b4e97 rw  rcutree.rcu_idle_gp_delay=1 modprobe.blacklist=modname1,modname2,modname3
-...
-</code></pre>
-							</blockquote>
-						</div>
-					</section>
-					<section>
-						<h3>Tainted Kernel</h3>
-						<blockquote onclick="zoom.to({element: this})">
-							<ul>
-								<li>When the Kernel is in a state that is unsupported by the community</li>
-								<li>The kernel may become tainted for any of several reasons:</li>
-								<ul>
-									<li>Use of a proprietary (or non-GPL compatible) kernel module</li>
-									<li>Staging drivers: part of the kernel source code but not fully tested</li>
-									<li>etc..</li>
-								</ul>
-							</ul>
-						</blockquote>
-					</section>
-				</section>
-
-				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
-					<section>
+  					<section>
 						<h2>Conclusiones</h2>
 						<ul>
 							<li></li>
