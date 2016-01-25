@@ -232,6 +232,199 @@
   					<section>
 						<h2>Despliegue en Amazon: Docker + Zookeeper + Kafka + Jar + Spark + Cassandra</h2>
 					</section>
+  					<section>
+						<h3>Inventarios</h3>
+						<ul>
+							<li>Desarrollo</li>
+							<li>QA Seven (Amazon)</li>
+							<li>QA Cliente</li>
+							<li>Producción</li>
+						</ul>
+					</section>
+  					<section>
+						<h3>Inventario Desarrollo</h3>
+						<pre>
+							<code data-trim data-noescape>
+# file: dev
+ 
+[local]
+127.0.0.1
+ 
+[damontic]
+192.168.16.8
+ 
+[rodrigo]
+192.168.16.9
+ 
+[oscar]
+192.168.6.90
+ 
+[vashy]
+192.168.16.6
+ 
+[natalia]
+192.168.16.7
+ 
+[archlinux:children]
+damontic
+ 
+[ubuntu:children]
+rodrigo
+oscar
+vashy
+natalia
+ 
+[dev:children]
+damontic
+rodrigo
+oscar
+vashy
+natalia
+ 
+[dockers:children]
+local
+ 
+[zookeeper1:children]
+local
+ 
+[zookeeper2:children]
+local
+ 
+[kafka1:children]
+local
+ 
+[kafka2:children]
+local
+ 
+[sparkMaster1:children]
+local
+ 
+[sparkMaster2:children]
+local
+ 
+[sparkWorker1:children]
+local
+ 
+[sparkWorker2:children]
+local
+ 
+[cassandra1:children]
+local
+ 
+[cassandra2:children]
+local
+ 
+[cassandra3:children]
+local
+ 
+[cassandraClient:children]
+local
+ 
+[builder:children]
+local
+ 
+[zookeepers:children]
+zookeeper1
+zookeeper2
+ 
+[kafkas:children]
+kafka1
+kafka2
+ 
+[sparks:children]
+sparkMaster1
+sparkMaster2
+sparkWorker1
+sparkWorker2
+ 
+[cassandras:children]
+cassandra1
+cassandra2
+cassandra3
+ 
+[ingestor1:children]
+local
+ 
+[ingestores:children]
+ingestor1
+						    </code>
+						</pre>
+					</section>
+
+				<section>
+					<h3>Inventario QA Seven</h3>
+					<pre>
+						<code data-trim data-noescape>
+file: qaSeven
+ 
+[local]
+127.0.0.1
+ 
+[qa1]
+52.90.45.171
+ 
+[qa2]
+54.84.125.14
+ 
+[qa3]
+54.86.84.38
+ 
+[qaSeven:children]
+qa1
+qa2
+qa3
+ 
+[dockers:children]
+qa1
+qa2
+qa3
+ 
+[zookeeper1:children]
+qa1
+ 
+[zookeeper2:children]
+qa2
+ 
+[kafka1:children]
+qa3
+ 
+[kafka2:children]
+qa1
+ 
+[sparkMaster1:children]
+qa2
+ 
+[sparkMaster2:children]
+qa3
+ 
+[sparkWorker1:children]
+qa1
+ 
+[sparkWorker2:children]
+qa2
+ 
+[ingestor1:children]
+qa3
+ 
+[zookeepers:children]
+zookeeper1
+zookeeper2
+ 
+[kafkas:children]
+kafka1
+kafka2
+ 
+[sparks:children]
+sparkMaster1
+sparkMaster2
+sparkWorker1
+sparkWorker2
+ 
+[ingestores:children]
+ingestor1
+						    </code>
+						</pre>
+					</section>
 				</section>
 
 				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
