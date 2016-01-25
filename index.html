@@ -64,7 +64,7 @@
 				  <section>
 				    <h1>Agenda</h1>
 				  </section>
-				  
+
 				  <!-- TODO Carlos: configurar secciones de la parte de motivación -->
 				  <section>
 				    <h2>Motivación</h2>
@@ -76,7 +76,7 @@
 				      <li>Ansible vs Saltstack vs Puppet vs Chef</li>
 				    </ul>
 				  </section>
-				  
+
 				  <section>
 				    <h2>Dependencias</h2>
 				    <ul>
@@ -94,7 +94,7 @@
 					    </ul>
 					</ul>
 				  </section>
-				  
+
 				  <section>
 				    <h2>Ansible</h2>
 				    <ul>
@@ -108,7 +108,7 @@
 				      <li>Plantillas</li>
 				    </ul>
 				  </section>
-				  
+
 				  <section>
 				    <h2>Caso Práctico</h2>
 				    <ul>
@@ -120,7 +120,7 @@
 				    <h2>Conclusiones</h2>
 				  </section>
 				</section>
-				
+
 				<!-- TODO Carlos: llenar con las partes de la otra presentación -->
 				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
 				  <section>
@@ -278,7 +278,7 @@ pip uninstall docker-py
 		      			<pre>
 			  				<code>
 [david@JANUS ~]$ ssh-add
-Enter passphrase for /home/david/.ssh/id_rsa: 
+Enter passphrase for /home/david/.ssh/id_rsa:
 Identity added: /home/david/.ssh/id_rsa (/home/david/.ssh/id_rsa)
 			      			</code>
 						</pre>
@@ -297,34 +297,222 @@ Identity added: /home/david/.ssh/id_rsa (/home/david/.ssh/id_rsa)
 				  <section>
 				    <div onclick="zoom.to({element: this})">
 				      <h3>Inventario</h2>
+								El conjunto de Hosts con sus diferentes agrupamientos y variables que componen la infraestructura. Esta información se escribe en un archivo INI.
 				    </div>
 				  </section>
-
-				  <section>
+					<section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>Hechos / Facts</h2>
+				      <h3>Inventario</h2>
+								Hosts
+								<pre>
+									<code data-trim>
+#Host
+mail.example.com
+
+#Host con puerto específico
+badwolf.example.com:5309
+
+#Host con alias
+jumper ansible_port=5555 ansible_host=192.168.1.50
+								</code>
+							</pre>
 				    </div>
 				  </section>
+					<section>
+						<div onclick="zoom.to({element: this})">
+							<h3>Inventario</h2>
+								Grupos
+								<pre>
+									<code data-trim>
+#Grupo dbservers
+[dbservers]
+one.example.com
+two.example.com
+three.example.com
 
+#Grupo con rango de números
+[webservers_2]
+www[01:50].example.com
+
+#Grupo con rango alfabético
+[databases]
+db-[a:f].example.com
+								</code>
+							</pre>
+						</div>
+					</section>
+					<section>
+						<div onclick="zoom.to({element: this})">
+							<h3>Inventario</h2>
+								Variables
+								<pre>
+									<code data-trim>
+#Variables de Host
+[atlanta]
+host1 http_port=80 maxRequestsPerChild=808
+host2 http_port=303 maxRequestsPerChild=909
+
+#Variables de Grupo
+[atlanta:vars]
+ntp_server=ntp.atlanta.example.com
+proxy=proxy.atlanta.example.com
+								</code>
+							</pre>
+						</div>
+					</section>
+					<section>
+						<div onclick="zoom.to({element: this})">
+							<h3>Inventario</h2>
+								Grupos, Grupos de Grupos y Variables de Grupos
+								<pre>
+									<code data-trim>
+[atlanta]
+host1
+host2
+
+[raleigh]
+host2
+host3
+
+[southeast:children]
+atlanta
+raleigh
+
+[southeast:vars]
+some_server=foo.southeast.example.com
+halon_system_timeout=30
+self_destruct_countdown=60
+escape_pods=2
+
+[usa:children]
+southeast
+northeast
+southwest
+northwest
+								</code>
+							</pre>
+						</div>
+					</section>
 				  <section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>Tareas</h3>
+				      <h2>Hechos / Facts</h2>
+							<ul>
+								<li>
+									Los Hechos o "Facts" son variables de información que surgen de una conversación con un host (local o remoto), por ejemplo:
+									<ul>
+										<li>
+											Dirección IP
+										</li>
+										<li>
+											tipo o distribución del sistema operativo
+										</li>
+									</ul>
+								</li>
+								<li>
+									Estos podrán ser usados posteriormente en Playbooks para realizar condicionales, agrupamientos, etc.
+								</li>
+								<li>
+									Los hechos se almacenan comúnmente en archivos INI (pueden ser también JSON)
+								</li>
+							</ul>
+				    </div>
+				  </section>
+					<section>
+				    <div onclick="zoom.to({element: this})">
+				      <h2>Hechos / Facts</h2>
+								Por ejemplo en el siguiente archivo <b>local</b> INI:
+								<pre>
+									<code data-trim>
+[general]
+asdf=1
+bar=2
+								</code>
+							</pre>
+							Se define un hecho llamado <code>general</code> con dos miembros: <code>asdf</code> y <code>bar</code>.
+							Al ser local, podemos acceder a este hecho en nuestro playbook posteriormente refieriéndonos a el así:
+							<pre>
+								<code>
+{{ ansible_local.preferences.general.asdf }}
+								</code>
+							</pre>
 				    </div>
 				  </section>
 
  				  <section>
 				    <div onclick="zoom.to({element: this})">
 				      <h3>Módulos</h3>
+							Un Módulo o Module son pequeños programas o plugins que al ejecutarse realizan las acciones deseadas sobre algún Host.
+							Podemos verlas como la unidad funcional más pequeña de Ansible, ya que cualquier instrucción en Ansible por lo general resulta en la ejecución de uno o varios Módulos.
+							Estos se almacenan en bibliotecas y Ansible por defecto viene con una gran biblioteca que contiene los más comunes.
+							Pero esta biblioteca puede crecer instalando nuevos módulos disponibles en internet o realizando los propios.
+				    </div>
+				  </section>
+
+ 				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Módulos</h3>
+							Desde la línea de comando, podemos ejecutar estos tres módulos:
+							<pre>
+								<code>
+ansible webservers -m service -a "name=httpd state=started"
+ansible webservers -m ping
+ansible webservers -m command -a "/sbin/reboot -t now"
+								</code>
+							</pre>
+							Algunos módulos pueden recibir varios argumentos que se ingresan escribiendo <code>-a</code>.
 				    </div>
 				  </section>
 
 				  <section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>Playbooks</h3>
+				      <h3>Tareas</h3>
+							Una tarea, en su nivel más básico, no es más que un llamado a un Módulo de Ansible. Estas se emplearán para la composición de <b>Plays</b> o "jugadas".
 				    </div>
 				  </section>
 
-  				  <section>
+					<section>
+						<div onclick="zoom.to({element: this})">
+							<h3>Playbooks</h3>
+							<ul>
+								<li>
+									Son el conjunto base de instrucciones que me permitirá administrar las distintas configuraciones de mi infraestructura, automatizar y orquestrar tareas.
+								</li>
+								<li>
+									Técnicamente hablando, son un conjunto de Plays o "jugadas". Las jugadas no son más que decirle a un Host o Grupo de Hosts que ejecuten ciertas Roles o Tareas.
+								</li>
+								<li>
+									Un Playbook se escribe en un archivo YML.
+								</li>
+							</ul>
+						</div>
+					</section>
+
+  				<section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Playbooks</h3>
+							<pre>
+								<code>
+---
+- hosts: webservers
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: ensure apache is at the latest version
+    yum: name=httpd state=latest
+  - name: write the apache config file
+    template: src=/srv/httpd.j2 dest=/etc/httpd.conf
+    notify:
+    - restart apache
+  - name: ensure apache is running (and enable it at boot)
+    service: name=httpd state=started enabled=yes
+								</code>
+							</pre>
+				    </div>
+				  </section>
+
+  				<section>
 				    <div onclick="zoom.to({element: this})">
 				      <h3>Variables</h3>
 				    </div>
@@ -383,105 +571,105 @@ Identity added: /home/david/.ssh/id_rsa (/home/david/.ssh/id_rsa)
 						<pre>
 							<code data-trim data-noescape>
 # file: dev
- 
+
 [local]
 127.0.0.1
- 
+
 [damontic]
 192.168.16.8
- 
+
 [rodrigo]
 192.168.16.9
- 
+
 [oscar]
 192.168.6.90
- 
+
 [vashy]
 192.168.16.6
- 
+
 [natalia]
 192.168.16.7
- 
+
 [archlinux:children]
 damontic
- 
+
 [ubuntu:children]
 rodrigo
 oscar
 vashy
 natalia
- 
+
 [dev:children]
 damontic
 rodrigo
 oscar
 vashy
 natalia
- 
+
 [dockers:children]
 local
- 
+
 [zookeeper1:children]
 local
- 
+
 [zookeeper2:children]
 local
- 
+
 [kafka1:children]
 local
- 
+
 [kafka2:children]
 local
- 
+
 [sparkMaster1:children]
 local
- 
+
 [sparkMaster2:children]
 local
- 
+
 [sparkWorker1:children]
 local
- 
+
 [sparkWorker2:children]
 local
- 
+
 [cassandra1:children]
 local
- 
+
 [cassandra2:children]
 local
- 
+
 [cassandra3:children]
 local
- 
+
 [cassandraClient:children]
 local
- 
+
 [builder:children]
 local
- 
+
 [zookeepers:children]
 zookeeper1
 zookeeper2
- 
+
 [kafkas:children]
 kafka1
 kafka2
- 
+
 [sparks:children]
 sparkMaster1
 sparkMaster2
 sparkWorker1
 sparkWorker2
- 
+
 [cassandras:children]
 cassandra1
 cassandra2
 cassandra3
- 
+
 [ingestor1:children]
 local
- 
+
 [ingestores:children]
 ingestor1
 						    </code>
@@ -495,70 +683,70 @@ ingestor1
 					<pre>
 						<code data-trim data-noescape>
 file: qaSeven
- 
+
 [local]
 127.0.0.1
- 
+
 [qa1]
 52.90.45.171
- 
+
 [qa2]
 54.84.125.14
- 
+
 [qa3]
 54.86.84.38
- 
+
 [qaSeven:children]
 qa1
 qa2
 qa3
- 
+
 [dockers:children]
 qa1
 qa2
 qa3
- 
+
 [zookeeper1:children]
 qa1
- 
+
 [zookeeper2:children]
 qa2
- 
+
 [kafka1:children]
 qa3
- 
+
 [kafka2:children]
 qa1
- 
+
 [sparkMaster1:children]
 qa2
- 
+
 [sparkMaster2:children]
 qa3
- 
+
 [sparkWorker1:children]
 qa1
- 
+
 [sparkWorker2:children]
 qa2
- 
+
 [ingestor1:children]
 qa3
- 
+
 [zookeepers:children]
 zookeeper1
 zookeeper2
- 
+
 [kafkas:children]
 kafka1
 kafka2
- 
+
 [sparks:children]
 sparkMaster1
 sparkMaster2
 sparkWorker1
 sparkWorker2
- 
+
 [ingestores:children]
 ingestor1
 						    </code>
@@ -635,7 +823,7 @@ netcat_command: ncat
 						<pre>
 							<code data-trim data-noescape>
 # file: dependencias.yml
- 
+
 - hosts: dockers
   roles:
     - {
@@ -652,77 +840,77 @@ netcat_command: ncat
 						<pre>
 							<code data-trim data-noescape>
 # file: roles/dependencias_docker/tasks/main.yml
- 
+
 - name: make sure python2-httplib2 is installed in Ubuntu
   apt: name=python-httplib2 state=present
   when: ansible_distribution == "Ubuntu"
- 
+
 - name: make sure python2-httplib2 is installed in Archlinux
   pacman: name=python2-httplib2 state=present
   when: ansible_distribution == "Archlinux"
- 
+
 - name: be sure docker is installed in Ubuntu
   apt: name=docker-engine state=present
   tags: docker
   when: ansible_distribution == "Ubuntu"
- 
+
 - name: be sure docker is installed in Archlinux
   pacman: name=docker state=present
   tags: docker
   when: ansible_distribution == "Archlinux"
- 
+
 - name: be sure dockerd is running and enabled in System Distributions
   service: name=docker.service state=started
   tags: docker
   when: ansible_distribution == "Archlinux" or (ansible_distribution == "Ubuntu" and (ansible_distribution_version == "15.10" or ansible_distribution_version == "15.04")) or (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7" )
- 
+
 - name: be sure dockerd is running and enabled in init based Distributions
   service: name=docker state=started
   tags: docker
   when: ansible_distribution == "Ubuntu" and (ansible_distribution_version == "14.10" or ansible_distribution_version == "14.04" or ansible_distribution_version == "13.10" or ansible_distribution_version == "13.04") or (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6" )
- 
+
 - name: create directory /opt/s4n
   file: path="/opt/s4n" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}"
   when: ansible_distribution == "RedHat"
- 
+
 - name: create directory /opt/s4n/facturacion
   file: path="/opt/s4n/facturacion" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}"
   when: ansible_distribution == "RedHat"
- 
+
 - name: create directory /opt/s4n/facturacion/docker_images
   file: path="/opt/s4n/facturacion/docker_images" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}"
   when: ansible_distribution == "RedHat"
- 
+
 - name: send infra-proyecto.tar.gz to RedHats
   copy: src="{{ deploy_directory }}/infra-proyecto/infra-proyecto.tar.gz" dest="/opt/s4n/facturacion/infra-proyecto.tar.gz" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
   when: ansible_distribution == "RedHat"
- 
+
 - name: send alpine-image to RedHats
   copy: src="{{ deploy_directory }}/docker-images/alpine.tar" dest="/opt/s4n/facturacion/docker_images/alpine.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
   when: ansible_distribution == "RedHat"
- 
+
 - name: send alpine-oracle-jre to RedHats
   copy: src="{{ deploy_directory }}/docker-images/proyecto_alpine-oracle-jre-8.tar" dest="/opt/s4n/facturacion/docker_images/proyecto_alpine-oracle-jre-8.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
   when: ansible_distribution == "RedHat"
- 
+
 - name: verifies that alpine exists in RedHat
   command: "docker images alpine"
   register: alpineImageExists
   when: ansible_distribution == "RedHat"
- 
+
 - name: docker import alpine to RedHats
   command: "docker load -i=/opt/s4n/facturacion/docker_images/alpine.tar"
   when: ansible_distribution == "RedHat" and alpineImageExists.stdout.find('alpine') == -1
- 
+
 - name: verifies that alpine-oracle-jre-8 exists in RedHat
   command: "docker images proyecto/alpine-oracle-jre-8"
   register: oracleImageExists
   when: ansible_distribution == "RedHat"
- 
+
 - name: docker import alpine-oracle-jre to RedHats
   command: "docker load -i=/opt/s4n/facturacion/docker_images/proyecto_alpine-oracle-jre-8.tar"
   when: ansible_distribution == "RedHat"  and oracleImageExists.stdout.find('oracle') == -1
- 
+
 - name: be sure docker alpine-oracle-jre-8 is available
   docker_image: path={{ infra_proyecto_git_clone_dir }}/alpine-oracle-jre-8 name=proyecto/alpine-oracle-jre-8 state=present
   tags: docker
@@ -747,7 +935,7 @@ hosts: zookeeper1
     	zookeeper_host_quorum_port: 2888,
     	zookeeper_host_leader_election_port: 3888
     }
- 
+
 - hosts: zookeeper2
   roles:
     - {
@@ -769,24 +957,24 @@ hosts: zookeeper1
 						<pre>
 							<code data-trim data-noescape>
 #file: roles/zookeeper/tasks/main.yml
- 
+
 - name: send alpine-zookeeper to RedHats
   copy: src="{{ deploy_directory }}/docker-images/proyecto_alpine-zookeeper.tar" dest="/opt/s4n/facturacion/docker_images/proyecto_alpine-zookeeper.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
   when: ansible_distribution == "RedHat"
- 
+
 - name: verifies that alpine-zookeeper exists in RedHat
   command: "docker images proyecto/alpine-zookeeper"
   register: alpineZookeeperImageExists
   when: ansible_distribution == "RedHat"
- 
+
 - name: docker load alpine-zookeeper to RedHats
   command: "docker load -i=/opt/s4n/facturacion/docker_images/proyecto_alpine-zookeeper.tar"
   when: ansible_distribution == "RedHat" and alpineZookeeperImageExists.stdout.find('zookeeper') == -1
- 
+
 - name: be sure docker alpine-zookeeper is available
   docker_image: path={{ infra_proyecto_git_clone_dir }}/alpine-zookeeper name=proyecto/alpine-zookeeper state=present
   tags: docker
- 
+
 - name: run the zookeeper node {{ zookeeper_zk_id }}
   docker:
     name: zoo_{{ zookeeper_zk_id }}
