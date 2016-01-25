@@ -605,7 +605,7 @@ cassandra_heap_new_size: 1G
 # file: host_vars/david
 ansible_ssh_user: david
 infra_git_clone_dir: /home/david/volume/donde_hice_clone/proyecto_infra
-cassandra_installation_dir: /home/david/volume/Java/cassandra/apache-cassandra-3.0.1
+cassandra_installation_dir: /home/david/volume/Java/cassandra/approyectoe-cassandra-3.0.1
 netcat_command: ncat
 					    	</code>
 						</pre>
@@ -647,7 +647,7 @@ netcat_command: ncat
 					</section>
 
 					<section>
-						<h3>Despliegue: playbook dependencias.yml</h3>
+						<h3>Despliegue: rol dependencias_docker</h3>
 						<div onclick="zoom.to({element: this})">
 						<pre>
 							<code data-trim data-noescape>
@@ -693,8 +693,8 @@ netcat_command: ncat
   file: path="/opt/s4n/facturacion/docker_images" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}"
   when: ansible_distribution == "RedHat"
  
-- name: send infra-ach.tar.gz to RedHats
-  copy: src="{{ deploy_directory }}/infra-ach/infra-ach.tar.gz" dest="/opt/s4n/facturacion/infra-ach.tar.gz" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
+- name: send infra-proyecto.tar.gz to RedHats
+  copy: src="{{ deploy_directory }}/infra-proyecto/infra-proyecto.tar.gz" dest="/opt/s4n/facturacion/infra-proyecto.tar.gz" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
   when: ansible_distribution == "RedHat"
  
 - name: send alpine-image to RedHats
@@ -702,7 +702,7 @@ netcat_command: ncat
   when: ansible_distribution == "RedHat"
  
 - name: send alpine-oracle-jre to RedHats
-  copy: src="{{ deploy_directory }}/docker-images/ach_alpine-oracle-jre-8.tar" dest="/opt/s4n/facturacion/docker_images/ach_alpine-oracle-jre-8.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
+  copy: src="{{ deploy_directory }}/docker-images/proyecto_alpine-oracle-jre-8.tar" dest="/opt/s4n/facturacion/docker_images/proyecto_alpine-oracle-jre-8.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
   when: ansible_distribution == "RedHat"
  
 - name: verifies that alpine exists in RedHat
@@ -715,17 +715,83 @@ netcat_command: ncat
   when: ansible_distribution == "RedHat" and alpineImageExists.stdout.find('alpine') == -1
  
 - name: verifies that alpine-oracle-jre-8 exists in RedHat
-  command: "docker images ach/alpine-oracle-jre-8"
+  command: "docker images proyecto/alpine-oracle-jre-8"
   register: oracleImageExists
   when: ansible_distribution == "RedHat"
  
 - name: docker import alpine-oracle-jre to RedHats
-  command: "docker load -i=/opt/s4n/facturacion/docker_images/ach_alpine-oracle-jre-8.tar"
+  command: "docker load -i=/opt/s4n/facturacion/docker_images/proyecto_alpine-oracle-jre-8.tar"
   when: ansible_distribution == "RedHat"  and oracleImageExists.stdout.find('oracle') == -1
  
 - name: be sure docker alpine-oracle-jre-8 is available
-  docker_image: path={{ infra_ach_git_clone_dir }}/alpine-oracle-jre-8 name=ach/alpine-oracle-jre-8 state=present
+  docker_image: path={{ infra_proyecto_git_clone_dir }}/alpine-oracle-jre-8 name=proyecto/alpine-oracle-jre-8 state=present
   tags: docker
+					    	</code>
+						</pre>
+						</div>
+					</section>
+
+					<section>
+						<h3>Despliegue: playbook zookeepers.yml</h3>
+						<div onclick="zoom.to({element: this})">
+						<pre>
+							<code data-trim data-noescape>
+# file: zookeepers.yml
+hosts: zookeeper1
+  roles:
+    - { role: zookeeper, zookeeper_zk_id: 1, zookeeper_zk_servers: "server.1=0.0.0.0:2888:3888 server.2={{ hostvars[groups['zookeeper2'][0]]['inventory_hostname'] }}:2889:3889", zookeeper_host_client_port: 2181, zookeeper_host_quorum_port: 2888, zookeeper_host_leader_election_port: 3888 }
+ 
+- hosts: zookeeper2
+  roles:
+    - { role: zookeeper, zookeeper_zk_id: 2, zookeeper_zk_servers: "server.1={{ hostvars[groups['zookeeper1'][0]]['inventory_hostname'] }}:2888:3888 server.2=0.0.0.0:2888:3888", zookeeper_host_client_port: 2182, zookeeper_host_quorum_port: 2889, zookeeper_host_leader_election_port: 3889 }
+					    	</code>
+						</pre>
+						</div>
+					</section>
+
+					<section>
+						<h3>Despliegue: rol zookeepers</h3>
+						<div onclick="zoom.to({element: this})">
+						<pre>
+							<code data-trim data-noescape>
+#file: roles/zookeeper/tasks/main.yml
+ 
+- name: send alpine-zookeeper to RedHats
+  copy: src="{{ deploy_directory }}/docker-images/proyecto_alpine-zookeeper.tar" dest="/opt/s4n/facturacion/docker_images/proyecto_alpine-zookeeper.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
+  when: ansible_distribution == "RedHat"
+ 
+- name: verifies that alpine-zookeeper exists in RedHat
+  command: "docker images proyecto/alpine-zookeeper"
+  register: alpineZookeeperImageExists
+  when: ansible_distribution == "RedHat"
+ 
+- name: docker load alpine-zookeeper to RedHats
+  command: "docker load -i=/opt/s4n/facturacion/docker_images/proyecto_alpine-zookeeper.tar"
+  when: ansible_distribution == "RedHat" and alpineZookeeperImageExists.stdout.find('zookeeper') == -1
+ 
+- name: be sure docker alpine-zookeeper is available
+  docker_image: path={{ infra_proyecto_git_clone_dir }}/alpine-zookeeper name=proyecto/alpine-zookeeper state=present
+  tags: docker
+ 
+- name: run the zookeeper node {{ zookeeper_zk_id }}
+  docker:
+    name: zoo_{{ zookeeper_zk_id }}
+    image: proyecto/alpine-zookeeper
+    state: started
+    env:
+      ZK_SERVERS: "{{ zookeeper_zk_servers }}"
+      ZK_ID: "{{ zookeeper_zk_id }}"
+    expose:
+      - 2181
+      - 2888
+      - 3888
+    ports:
+      - "{{ zookeeper_host_client_port }}:2181"
+      - "{{ zookeeper_host_quorum_port }}:2888"
+      - "{{ zookeeper_host_leader_election_port }}:3888"
+    docker_api_version: 1.18
+    restart_policy: on-failure
+    restart_policy_retry: 3
 					    	</code>
 						</pre>
 						</div>
