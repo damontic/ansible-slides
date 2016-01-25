@@ -64,16 +64,15 @@
 				  <section>
 				    <h1>Agenda</h1>
 				  </section>
-
-				  <!-- TODO Carlos: configurar secciones de la parte de motivación -->
 				  <section>
 				    <h2>Motivación</h2>
 				    <ul>
-				      <li>¿Qué es?</li>
-				      <li>¿Para qué?</li>
-				      <li>¿Quienes lo usan?</li>
-				      <li>Historia</li>
-				      <li>Ansible vs Saltstack vs Puppet vs Chef</li>
+				   		<li>Tareas comunes operaciones</li>
+				    	<li>Snowflake Server</li>
+				    	<li>Phoenix Server</li>
+				    	<li>Automatizar con Scripts</li>
+				    	<li>Infraestructura como código</li>
+				    	<li>Puppet</li>
 				    </ul>
 				  </section>
 
@@ -124,35 +123,156 @@
 				    <div onclick="zoom.to({element: this})">
 				      <h2>Motivación</h2>
 				  </section>
+
 				  <section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>¿Qué es?</h2>
+				      <h3>Tareas comunes operaciones</h2>
+				      	<ul>
+				      		<li>Preparar y aprovisionar infraestructura</li>
+				      		<li>Desplegar aplicaciones</li>
+				      		<li>Configurar daemons</li>
+				      		<li>Asegurar correctitud de ambientes</li>
+				      	<ul>
 				    </div>
 				  </section>
 
 				  <section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>¿Para qué?</h3>
+				      <h3>Tareas comunes operaciones</h2>
+				      	<ul>
+				      		<li>Sistema Operativo Actualizado</li>
+				      		<li>Parches de Seguridad Actualizados</li>
+				      		<li>Vivir en modo <i>ssh</i></li>
+				      		<li>Almacenar notas sobre la configuración</li>
+				      	<ul>
 				    </div>
 				  </section>
 
- 				  <section>
+  				  <section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>¿Quienes lo usan?</h3>
+				      <h3>Snowflake Server</h2>
+				      	<ul>
+				      		<li>Ejecutar manualmente estas tareas</li>
+				      		<ul>
+				      			<li>Toma tiempo</li>
+				      			<li>Propenso a errores</li>
+				      		</ul>
+				      		<li>Dificultades</li>
+				      		<ul>
+				      			<li>Reproducir el estado de un servidor</li>
+				      			<li>Actualizarlos sin inducir errores</li>
+				      		</ul>
+				      	<ul>
 				    </div>
 				  </section>
 
 				  <section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>Historia</h3>
+				      <h3>Phoenix Server</h2>
+				      	<ul>
+				      		<li>Al perder servidores críticos</li>
+				      		<ul>
+				      			<li>En cuánto tiempo puedo l evantar la infraestructura y las aplicaciones que corren en ella.</li>
+				      		</ul>
+				      	<ul>
+				    </div>
+				  </section>
+
+  				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Automatizar con Scripts</h2>
+				      	<ul>
+				      		<li>Scripts complejos</li>
+				      		<li>No muy bien documentados</li>
+				      		<li>¿Quien entiende bash?</li>
+				      	<ul>
 				    </div>
 				  </section>
 
 				  <section>
 				    <div onclick="zoom.to({element: this})">
-				      <h3>Ansible vs Saltstack vs Puppet vs Chef</h3>
+				      <h3>Infraestructura como código</h2>
+				      	<ul>
+				      		<li>Código en un lenguaje de programación o un DSL descriptivo de alto nivel.</li>
+				      		<li>Descripción de estado de la infraestructura.</li>
+				      		<ul>
+				      			<li>Paquetes instalados</li>
+				      			<li>Archivos e configuración coninfromación adecuada</li>
+				      			<li>Sericios en ejecución</li>
+				      			<li>Archivos con permisos adecuados</li>
+				      		</ul>
+				      	<ul>
 				    </div>
 				  </section>
+
+  				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Infraestructura como código</h2>
+				      	<ul>
+				      		<li>Abarca</li>
+				      		<ul>
+				      			<li>Aprovisionamiento de infraestructura</li>
+				      			<li>Administración de configuraciones</li>
+				      			<li>Depsliegue de Aplicaciones</li>
+				      		</ul>
+				      	<ul>
+				    </div>
+				  </section>
+
+				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Infraestructura como código</h2>
+				      	<ul>
+				      		<li>Infraestructura en mi sistema de control de versiones</li>
+			      			<li>Idempotencia</li>
+				      	<ul>
+				    </div>
+				  </section>
+
+  				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Infraestructura como código</h2>
+				      	<ul>
+				      		<li>No deben existir <i>Snowflakes Servers</i></li>
+			      			<li>No se deben ejecutar operaciones manualmente</li>
+				      	<ul>
+				    </div>
+				  </section>
+
+				  <section>
+				      <h3>Puppet</h2>
+				      	<ul>
+				      		<li>Agentes en los clientes y un servidor central <i>Puppet Master</i></li>
+				      		<div onclick="zoom.to({element: this})">
+				      			<img data-src="./images/puppet.png" width="50%" heigth="50%" />
+				      		</div>
+			      			<li>DSL declarativo en Ruby</li>
+			      			<li>Instalación de configuraciones pull-based</li>
+				      	<ul>
+				  </section>
+
+  				  <section>
+				      <h3>Puppet</h2>
+				      	<ul>
+			      			<li>Se programa entorno al estado deseado de la infraestructura. Un nodo pasa de un estado actual al estado deseado.</li>
+				      		<div onclick="zoom.to({element: this})">
+				      			<img data-src="./images/puppet_example.png" width="50%" heigth="50%" />
+				      		</div>
+			      			<li>Métodos idempotentes llamados <i>resources</i></li>
+				      	<ul>
+				  </section>
+
+				  <section>
+				    <div onclick="zoom.to({element: this})">
+				      <h3>Puppet</h2>
+				      	<ul>
+			      			<li>El nodo manda información al servidor sobre su estado actual.</li>
+			      			<li>El servidor prepara un catálogo con los cambios que deben ser ejecutados en el nodo.</li>
+			      			<li>El nodo notifica al servidor que la configuración está completa</li>
+				      	<ul>
+				    </div>
+				  </section>
+
 				</section>
 
 				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
@@ -982,6 +1102,7 @@ hosts: zookeeper1
   					<section>
 						<h2>Conclusiones</h2>
 						<ul>
+							<li>Ansible es Push-Based.</li>
 							<li>Facilita el despliegue en cualquier Ambiente.</li>
 							<ul>
 								<li>(D'_')=D (Producción)</li>
