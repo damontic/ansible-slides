@@ -112,7 +112,7 @@
 				  <section>
 				    <h2>Caso Práctico</h2>
 				    <ul>
-				      <li>Despliegue en Amazon: Docker + Zookeeper + Kafka + Jar + Spark + Cassandra</li>
+				      <li>Despliegue en Amazon: Docker + Zookeeper</li>
 				    </ul>
 				  </section>
 
@@ -346,7 +346,7 @@ Identity added: /home/david/.ssh/id_rsa (/home/david/.ssh/id_rsa)
 
 				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
   					<section>
-						<h2>Ejemplo: Docker + Zookeeper + Kafka + Jar + Spark + Cassandra</h2>
+						<h2>Ejemplo: Docker + Zookeeper</h2>
 					</section>
 
 					<section>
@@ -739,11 +739,25 @@ netcat_command: ncat
 # file: zookeepers.yml
 hosts: zookeeper1
   roles:
-    - { role: zookeeper, zookeeper_zk_id: 1, zookeeper_zk_servers: "server.1=0.0.0.0:2888:3888 server.2={{ hostvars[groups['zookeeper2'][0]]['inventory_hostname'] }}:2889:3889", zookeeper_host_client_port: 2181, zookeeper_host_quorum_port: 2888, zookeeper_host_leader_election_port: 3888 }
+    - {
+    	role: zookeeper,
+    	zookeeper_zk_id: 1,
+    	zookeeper_zk_servers: "server.1=0.0.0.0:2888:3888 server.2={{ hostvars[groups['zookeeper2'][0]]['inventory_hostname'] }}:2889:3889",
+    	zookeeper_host_client_port: 2181,
+    	zookeeper_host_quorum_port: 2888,
+    	zookeeper_host_leader_election_port: 3888
+    }
  
 - hosts: zookeeper2
   roles:
-    - { role: zookeeper, zookeeper_zk_id: 2, zookeeper_zk_servers: "server.1={{ hostvars[groups['zookeeper1'][0]]['inventory_hostname'] }}:2888:3888 server.2=0.0.0.0:2888:3888", zookeeper_host_client_port: 2182, zookeeper_host_quorum_port: 2889, zookeeper_host_leader_election_port: 3889 }
+    - {
+    	role: zookeeper,
+    	zookeeper_zk_id: 2,
+    	zookeeper_zk_servers: "server.1={{ hostvars[groups['zookeeper1'][0]]['inventory_hostname'] }}:2888:3888 server.2=0.0.0.0:2888:3888",
+    	zookeeper_host_client_port: 2182,
+    	zookeeper_host_quorum_port: 2889,
+    	zookeeper_host_leader_election_port: 3889
+    }
 					    	</code>
 						</pre>
 						</div>
