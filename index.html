@@ -344,11 +344,30 @@ Identity added: /home/david/.ssh/id_rsa (/home/david/.ssh/id_rsa)
 
 				</section>
 
-				<!-- TODO: David -->
 				<section data-background="./images/S4N.png" data-state="img-top-right" data-background-size="250px">
   					<section>
 						<h2>Ejemplo: Docker + Zookeeper + Kafka + Jar + Spark + Cassandra</h2>
 					</section>
+
+					<section>
+						<h3>Estructura de Carpetas: Ansible Best Practices</h3>
+						<div onclick="zoom.to({element: this})">
+							<img data-src="./images/ansible_structure_1.png" width="35%" heigth="35%" />
+						</div>
+					</section>
+
+					<section>
+						<h3>Estructura de Carpetas: Ansible Best Practices</h3>
+						<img data-src="./images/ansible_structure_2.png" width="80%" heigth="80%" />
+					</section>
+
+					<section>
+						<h3>Estructura de Carpetas: Ansible Best Practices</h3>
+						<div onclick="zoom.to({element: this})">
+							<img data-src="./images/ansible_structure_3.png" width="25%" heigth="25%" />
+						</div>
+					</section>
+
   					<section>
 						<h3>Inventarios</h3>
 						<ul>
@@ -543,65 +562,42 @@ ingestor1
 						</pre>
 					</section>
 
+					<!--TODO David: colocar respuesta json -->
 					<section>
 						<h3>Hechos / Facts</h3>
 						<pre>
 							<code data-trim data-noescape>
-
+[david@JANUS ~] ansible -i dev -m setup vashy
 					    	</code>
 						</pre>
 					</section>
 
 					<section>
-						<h3>Tareas</h3>
+						<h3>Despliegue: playbook principal</h3>
 						<pre>
 							<code data-trim data-noescape>
-
+# file: site.yml
+- include: dependencias.yml
+- include: zookeepers.yml
+- include: kafkas.yml
+- include: sparks.yml
+- include: cassandras.yml
+- include: ingestor.yml
 					    	</code>
 						</pre>
 					</section>
 
 					<section>
-						<h3>Módulos</h3>
+						<h3>Despliegue: playbook dependencias.yml</h3>
 						<pre>
 							<code data-trim data-noescape>
-
-					    	</code>
-						</pre>
-					</section>
-
-					<section>
-						<h3>Playbooks</h3>
-						<pre>
-							<code data-trim data-noescape>
-
-					    	</code>
-						</pre>
-					</section>
-
-					<section>
-						<h3>Variables</h3>
-						<pre>
-							<code data-trim data-noescape>
-
-					    	</code>
-						</pre>
-					</section>
-
-					<section>
-						<h3>Roles</h3>
-						<pre>
-							<code data-trim data-noescape>
-
-					    	</code>
-						</pre>
-					</section>
-
-					<section>
-						<h3>Plantillas</h3>
-						<pre>
-							<code data-trim data-noescape>
-
+# file: dependencias.yml
+ 
+- hosts: dockers
+  roles:
+    - {
+       role: dependencias_docker
+    }
 					    	</code>
 						</pre>
 					</section>
