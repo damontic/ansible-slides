@@ -221,9 +221,26 @@ pip uninstall docker-py
 				      <img data-src="./images/ssh.jpg" width="80%" heigth="80%" />
 				  </section>
 				  <section>
-				    <div onclick="zoom.to({element: this})">
-				      <h3>ssh</h2>
-				    </div>
+				      <h3>ssh (cliente / servidor)</h2>
+				      <ul>
+				      	<li>Protocolo de red que permite intercambiar datos usando un canal seguro entre dos computadores.</li>
+				      	<li>Basado en criptografía de llave pública:</li>
+				      	<ul>
+				      		<li>dsa (deprecated)</li>
+			      			<li>ecdsa</li>
+		      				<li>ed25519</li>
+	      					<li>rsa</li>
+				      	</ul>
+				      	<div onclick="zoom.to({element: this})">
+				      	<li>Conociendo un usuario de la máquina remota podemos ingresar a ella.</li>
+			      		<pre>
+				  			<code>
+[david@JANUS ~]$ ssh vashy@192.168.16.6
+				      		</code>
+						</pre>
+					    </div>
+				      </ul>
+
 				  </section>
 
 				  <section>
