@@ -579,6 +579,40 @@ ingestor1
 					</section>
 
 					<section>
+						<h3>Variables de Grupo</h3>
+						<div onclick="zoom.to({element: this})">
+						<pre>
+							<code data-trim data-noescape>
+# file: group_vars/dev
+netcat_command: nc
+spark_version: 1.6.0
+scala_version: 2.11
+hadoop_version: 2.6
+kafka_version: 0.9.0.0
+cassandra_seeds: 172.17.0.8
+cassandra_max_heap_size: 2G
+cassandra_heap_new_size: 1G
+					    	</code>
+						</pre>
+						</div>
+					</section>
+
+					<section>
+						<h3>Variables de Host</h3>
+						<div onclick="zoom.to({element: this})">
+						<pre>
+							<code data-trim data-noescape>
+# file: host_vars/david
+ansible_ssh_user: david
+infra_git_clone_dir: /home/david/volume/donde_hice_clone/proyecto_infra
+cassandra_installation_dir: /home/david/volume/Java/cassandra/apache-cassandra-3.0.1
+netcat_command: ncat
+					    	</code>
+						</pre>
+						</div>
+					</section>
+
+					<section>
 						<h3>Despliegue: playbook principal</h3>
 						<div onclick="zoom.to({element: this})">
 						<pre>
