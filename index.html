@@ -379,6 +379,7 @@ Identity added: /home/david/.ssh/id_rsa (/home/david/.ssh/id_rsa)
 					</section>
   					<section>
 						<h3>Inventario Desarrollo</h3>
+						<div onclick="zoom.to({element: this})">
 						<pre>
 							<code data-trim data-noescape>
 # file: dev
@@ -485,10 +486,12 @@ local
 ingestor1
 						    </code>
 						</pre>
+						</div>
 					</section>
 
 				<section>
 					<h3>Inventario QA Seven</h3>
+					<div onclick="zoom.to({element: this})">
 					<pre>
 						<code data-trim data-noescape>
 file: qaSeven
@@ -560,20 +563,24 @@ sparkWorker2
 ingestor1
 						    </code>
 						</pre>
+						</div>
 					</section>
 
 					<!--TODO David: colocar respuesta json -->
 					<section>
 						<h3>Hechos / Facts</h3>
+						<div onclick="zoom.to({element: this})">
 						<pre>
 							<code data-trim data-noescape>
 [david@JANUS ~] ansible -i dev -m setup vashy
 					    	</code>
 						</pre>
+						</div>
 					</section>
 
 					<section>
 						<h3>Despliegue: playbook principal</h3>
+						<div onclick="zoom.to({element: this})">
 						<pre>
 							<code data-trim data-noescape>
 # file: site.yml
@@ -585,10 +592,12 @@ ingestor1
 - include: ingestor.yml
 					    	</code>
 						</pre>
+						</div>
 					</section>
 
 					<section>
 						<h3>Despliegue: playbook dependencias.yml</h3>
+						<div onclick="zoom.to({element: this})">
 						<pre>
 							<code data-trim data-noescape>
 # file: dependencias.yml
@@ -600,6 +609,92 @@ ingestor1
     }
 					    	</code>
 						</pre>
+						</div>
+					</section>
+
+					<section>
+						<h3>Despliegue: playbook dependencias.yml</h3>
+						<div onclick="zoom.to({element: this})">
+						<pre>
+							<code data-trim data-noescape>
+# file: roles/dependencias_docker/tasks/main.yml
+ 
+- name: make sure python2-httplib2 is installed in Ubuntu
+  apt: name=python-httplib2 state=present
+  when: ansible_distribution == "Ubuntu"
+ 
+- name: make sure python2-httplib2 is installed in Archlinux
+  pacman: name=python2-httplib2 state=present
+  when: ansible_distribution == "Archlinux"
+ 
+- name: be sure docker is installed in Ubuntu
+  apt: name=docker-engine state=present
+  tags: docker
+  when: ansible_distribution == "Ubuntu"
+ 
+- name: be sure docker is installed in Archlinux
+  pacman: name=docker state=present
+  tags: docker
+  when: ansible_distribution == "Archlinux"
+ 
+- name: be sure dockerd is running and enabled in System Distributions
+  service: name=docker.service state=started
+  tags: docker
+  when: ansible_distribution == "Archlinux" or (ansible_distribution == "Ubuntu" and (ansible_distribution_version == "15.10" or ansible_distribution_version == "15.04")) or (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7" )
+ 
+- name: be sure dockerd is running and enabled in init based Distributions
+  service: name=docker state=started
+  tags: docker
+  when: ansible_distribution == "Ubuntu" and (ansible_distribution_version == "14.10" or ansible_distribution_version == "14.04" or ansible_distribution_version == "13.10" or ansible_distribution_version == "13.04") or (ansible_distribution == "RedHat" and ansible_distribution_major_version == "6" )
+ 
+- name: create directory /opt/s4n
+  file: path="/opt/s4n" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}"
+  when: ansible_distribution == "RedHat"
+ 
+- name: create directory /opt/s4n/facturacion
+  file: path="/opt/s4n/facturacion" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}"
+  when: ansible_distribution == "RedHat"
+ 
+- name: create directory /opt/s4n/facturacion/docker_images
+  file: path="/opt/s4n/facturacion/docker_images" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}"
+  when: ansible_distribution == "RedHat"
+ 
+- name: send infra-ach.tar.gz to RedHats
+  copy: src="{{ deploy_directory }}/infra-ach/infra-ach.tar.gz" dest="/opt/s4n/facturacion/infra-ach.tar.gz" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
+  when: ansible_distribution == "RedHat"
+ 
+- name: send alpine-image to RedHats
+  copy: src="{{ deploy_directory }}/docker-images/alpine.tar" dest="/opt/s4n/facturacion/docker_images/alpine.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
+  when: ansible_distribution == "RedHat"
+ 
+- name: send alpine-oracle-jre to RedHats
+  copy: src="{{ deploy_directory }}/docker-images/ach_alpine-oracle-jre-8.tar" dest="/opt/s4n/facturacion/docker_images/ach_alpine-oracle-jre-8.tar" owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" mode="a=r"
+  when: ansible_distribution == "RedHat"
+ 
+- name: verifies that alpine exists in RedHat
+  command: "docker images alpine"
+  register: alpineImageExists
+  when: ansible_distribution == "RedHat"
+ 
+- name: docker import alpine to RedHats
+  command: "docker load -i=/opt/s4n/facturacion/docker_images/alpine.tar"
+  when: ansible_distribution == "RedHat" and alpineImageExists.stdout.find('alpine') == -1
+ 
+- name: verifies that alpine-oracle-jre-8 exists in RedHat
+  command: "docker images ach/alpine-oracle-jre-8"
+  register: oracleImageExists
+  when: ansible_distribution == "RedHat"
+ 
+- name: docker import alpine-oracle-jre to RedHats
+  command: "docker load -i=/opt/s4n/facturacion/docker_images/ach_alpine-oracle-jre-8.tar"
+  when: ansible_distribution == "RedHat"  and oracleImageExists.stdout.find('oracle') == -1
+ 
+- name: be sure docker alpine-oracle-jre-8 is available
+  docker_image: path={{ infra_ach_git_clone_dir }}/alpine-oracle-jre-8 name=ach/alpine-oracle-jre-8 state=present
+  tags: docker
+					    	</code>
+						</pre>
+						</div>
 					</section>
 
 				</section>
