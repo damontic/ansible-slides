@@ -244,22 +244,49 @@ pip uninstall docker-py
 				  </section>
 
 				  <section>
-				    <div onclick="zoom.to({element: this})">
 				      <h3>ssh-keygen</h3>
-				    </div>
+				      	<div onclick="zoom.to({element: this})">
+				      	<ul>
+				      		<li>Permite generar uno o varios pares de llaves públicas y privadas.</li>
+				      		<li>Se recomienda asignarle una contraseña a la llave privada para que no baste con tenerla para ingresar a otras máquinas.</li>
+				      		<li>Por defecto guarda las llaves en:</li>
+				      		<ul>
+				      			<li>~/.ssh/id_rsa</li>
+				      			<li>~/.ssh/id_rsa.pub</li>
+				      		</ul>
+			      			<pre>
+				  				<code>
+[david@JANUS ~]$ ssh-keygen -t ed25519
+				      			</code>
+							</pre>
+				    	</ul>
+						</div>
 				  </section>
 
  				  <section>
-				    <div onclick="zoom.to({element: this})">
 				      <h3>ssh-agent</h3>
-				    </div>
+				      <ul>
+				      	<div onclick="zoom.to({element: this})">
+				      	<li>Autocompleta las contraseñas cada vez que ssh las solicita.</li>
+		      			<pre>
+			  				<code>
+[david@JANUS ~]$ eval $(ssh-agent)
+			      			</code>
+						</pre>
+					    </div>
+					    <div onclick="zoom.to({element: this})">
+				      	<li>Una vez se arranca el agente, se le pueden entregas llaves usando el comando <b>ssh-add</b>.</li>
+		      			<pre>
+			  				<code>
+[david@JANUS ~]$ ssh-add
+Enter passphrase for /home/david/.ssh/id_rsa: 
+Identity added: /home/david/.ssh/id_rsa (/home/david/.ssh/id_rsa)
+			      			</code>
+						</pre>
+				    	</div>
+				      </ul>
 				  </section>
 
-				  <section>
-				    <div onclick="zoom.to({element: this})">
-				      <h3>ssh-add</h3>
-				    </div>
-				  </section>
 				</section>
 
 				<!-- TODO: Grosso -->
